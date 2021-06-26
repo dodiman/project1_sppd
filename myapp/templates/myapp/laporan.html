@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block style %}
+<style>
+      .invoice {
+        font-family: 'Times New Roman', Times, serif;
+      }
+    </style>
+{% endblock %}
+
+{% block content %}
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper">
+    <!-- BEGIN CONTENT BODY -->
+    <div class="page-content">
+        <div class="invoice">
+            <div class="" style="position: relative;">
+                <div>
+                  <div class=WordSection1>
+
+<p class=MsoNormal align=center style='text-align:center'><b><span
+style='font-size:16.0pt;line-height:107%;font-family:"Times New Roman",serif'>LAPORAN
+ANGGARAN PERJALANAN DINAS</span></b></p>
+
+
+</div>
+                </div>
+                <br>
+                <div>
+                    <table width="100%" border="1">
+                      <tbody>
+                        <tr>
+                          <td>No</td>
+                          <td>Tanggal</td>
+                          <td>No SPPD</td>
+                          <td>Tujuan</td>
+                          <td>Jumlah Dana</td>
+                        </tr>
+                        {% for value in pengeluaran %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ value.tanggal |date:"d-m-o" }}</td>
+                                <td>{{ value.sppd.nomor }}</td>
+                                <td>{{ value.keperluan }}</td>
+                                <td>Rp {{ value.total_nya.jumlahnya__sum }}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                </div>                                       
+            </div>
+        </div>
+    </div>
+    <!-- END CONTENT BODY -->
+</div>
+<!-- END CONTENT -->
+
+
+
+{% endblock %}

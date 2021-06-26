@@ -1,0 +1,198 @@
+{% extends "base_admin.html" %}
+
+{% block content %}
+<div class="page-content-wrapper">
+	<!-- BEGIN CONTENT BODY -->
+	<div class="page-content">
+		<!-- BEGIN PAGE HEADER-->
+		<!-- BEGIN THEME PANEL -->
+		<div class="theme-panel hidden-xs hidden-sm">
+			<div class="toggler"> </div>
+			<div class="toggler-close"> </div>
+		</div>
+		<!-- END THEME PANEL -->
+		<!-- BEGIN PAGE BAR -->
+		<div class="page-bar">
+			<ul class="page-breadcrumb">
+				<li>
+					<a href="{% url 'myapp_index_admin' %}">Home</a>
+					<i class="fa fa-circle"></i>
+				</li>
+				<li>
+					<a href="#">Tables</a>
+					<i class="fa fa-circle"></i>
+				</li>
+				<li>
+					<span>Datatables</span>
+				</li>
+			</ul>
+
+		</div>
+		<!-- END PAGE BAR -->
+		<!-- BEGIN PAGE TITLE-->
+		<h1 class="page-title"> SPPD
+			<small>Data Table</small>
+		</h1>
+		<!-- END PAGE TITLE-->
+		<!-- END PAGE HEADER-->
+		<div class="row">
+			<div class="col-md-8">
+				<!-- BEGIN EXAMPLE TABLE PORTLET-->
+				<div class="portlet light bordered">
+					<div class="portlet-title">
+						<div class="caption font-dark">
+							<i class="icon-settings font-dark"></i>
+							<span class="caption-subject bold uppercase">Data</span>
+						</div>
+                        <!-- <div class="actions">
+                            <a href="" class="btn blue btn-outline">
+                                <i class="fa fa-plus"></i> Add </a>
+                            </div> -->
+                            <div class="tools"> </div>
+                        </div>
+                        <div class="portlet-body">
+                        	<form method="post">
+                        		{% csrf_token %}
+                        		
+                        		<div class="form-group" hidden="">
+								    <label for="{{ form.surat_perintah.id_for_label }}">Surat Perintah:</label>
+                        			{{ form.surat_perintah }}
+								    
+								</div>
+
+								<div class="form-group">
+								    <label">Surat Perintah:</label>
+								    <input class="form-control" type="text" value="{{ suratperintah.nomor }}" disabled="">
+								</div>
+
+                        		<div class="form-group" hidden="">
+								    
+								    <label for="{{ form.nomor.id_for_label }}">Nomor:</label>
+								    <input type="text" name="nomor" value=" ">
+								    <small class="text-danger">{{ form.nomor.errors }}</small>
+								</div>
+                        		
+								<div class="form-group">
+								    {{ form.tempat_berangkat.errors }}
+								    <label for="{{ form.tempat_berangkat.id_for_label }}">Tempat Berangkat:</label>
+								    {{ form.tempat_berangkat }}
+								    <small class="text-danger"></small>
+								</div>
+								<div class="form-group">
+								    {{ form.tempat_tujuan.errors }}
+								    <label for="{{ form.tempat_tujuan.id_for_label }}">Tempat Tujuan:</label>
+								    {{ form.tempat_tujuan }}
+								    <small class="text-danger"></small>
+								</div>
+								<div class="row">
+                                       <div class="col-md-6">
+								<div class="form-group">
+								    <label for="{{ form.tanggal_berangkat.id_for_label }}">Tanggal Berangkat:</label>
+									<div class="input-group input-medium date date-picker" data-date-format="yyyy-mm-dd">
+								    
+								    {{ form.tanggal_berangkat }}
+								    <span class="input-group-btn">
+							            <button class="btn default" type="button">
+							                <i class="fa fa-calendar"></i>
+							            </button>
+							        </span>
+							        <small class="text-danger">{{ form.tanggal_berangkat.errors }}</small>
+								</div>
+								</div>
+								</div>
+                                       <div class="col-md-6">
+
+								<div class="form-group">
+								    <label for="{{ form.tanggal_kembali.id_for_label }}">Tanggal Kembali:</label>
+									<div class="input-group input-medium date date-picker" data-date-format="yyyy-mm-dd">
+								    
+								    {{ form.tanggal_kembali }}
+								    <span class="input-group-btn">
+							            <button class="btn default" type="button">
+							                <i class="fa fa-calendar"></i>
+							            </button>
+							        </span>
+							        <small class="text-danger">{{ form.tanggal_kembali.errors }}</small>
+								</div>
+								</div>
+								</div>
+								</div>
+								
+								<div class="form-group">
+									<small class="text-danger">{{ form.jenis_transportasi.errors }}</small>
+								    
+								    <label for="{{ form.jenis_transportasi.id_for_label }}">Jenis Transportasi:</label>
+								    {{ form.jenis_transportasi }}
+								</div>
+								<div class="form-group">
+									<small class="text-danger">{{ form.keterangan.errors }}</small>
+								    
+								    <label for="{{ form.keterangan.id_for_label }}">Keterangan:</label>
+								    {{ form.keterangan }}
+								</div>
+								
+                        		<div class="form-actions right">
+                                	<button type="submit" class="btn green">Simpan</button>
+                           	 	</div>
+                        	</form>
+                        </div>
+                    </div>
+                    <!-- END EXAMPLE TABLE PORTLET-->
+                </div>
+            </div>
+        </div>
+        <!-- END CONTENT BODY -->
+    </div>
+
+    
+{% endblock %}
+
+{% block scripts %}
+    <script>
+	$(document).ready(function () {
+        $('.date-picker').datepicker({
+            orientation: "left",
+            format: 'yyyy-mm-dd',
+            todayHighlight: true,
+            autoclose: true
+        });
+
+        $( ".select2" ).select2({        
+                ajax: {
+                    url: "/api/select/surat/pegawai",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term // search term
+                        };
+                    },
+                    processResults: function (data) {
+                        // parse the results into the format expected by Select2.
+                        // since we are using custom formatting functions we do not need to
+                        // alter the remote JSON data
+                        return {
+                            results:  $.map(data, function (item) {
+                                return {
+                                    text: item.nama,
+                                    id: item.id
+                                }
+                            })
+
+                        };
+                    },
+                    cache: true
+                },
+                // minimumInputLength: 2
+                escapeMarkup: function(markup) {
+                    return markup;
+                },
+                multiple: true,
+                allowClear: true,
+                placeholder: 'Type for search company categories',
+                minimumInputLength: 2,
+            });
+        });
+
+</script>
+    {% endblock %}
