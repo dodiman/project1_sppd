@@ -1,57 +1,83 @@
 {% extends "base_admin.html" %}
 
 {% block style %}
+{% load l10n %}
+{% load i18n %}
+{% load humanize %}
 <style>
-      .invoice {
-        font-family: 'Times New Roman', Times, serif;
-      }
-    </style>
+.invoice {
+    font-family: 'Times New Roman', Times, serif;
+}
+</style>
 {% endblock %}
 
 {% block content %}
 <!-- BEGIN CONTENT -->
 <div class="page-content-wrapper">
+
     <!-- BEGIN CONTENT BODY -->
     <div class="page-content">
+        <div class="page-bar">
+            <br />
+            <form action="" method="post" class="form-inline" role="form">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label class="radio-inline" for="{{ form.bulan.id_for_label }}">Bulan</label>
+                    {{ form.bulan }}
+                </div>
+                <div class="form-group">
+                    <label class="" for="{{ form.tahun.id_for_label }}">Tahun</label>
+                    {{ form.tahun }}
+                </div>
+                <button type="submit" class="btn btn-danger">Filter</button>
+                <a href="" class="btn btn-info">Reset</a>
+            </form>
+            <br />
+
+        </div>
+        
         <div class="invoice">
             <div class="" style="position: relative;">
                 <div>
                   <div class=WordSection1>
 
-<p class=MsoNormal align=center style='text-align:center'><b><span
-style='font-size:16.0pt;line-height:107%;font-family:"Times New Roman",serif'>LAPORAN
-ANGGARAN PERJALANAN DINAS</span></b></p>
+                    <p class=MsoNormal align=center style='text-align:center'><b><span
+                        style='font-size:16.0pt;line-height:107%;font-family:"Times New Roman",serif'>LAPORAN
+                    ANGGARAN PERJALANAN DINAS</span></b></p>
 
 
-</div>
                 </div>
-                <br>
-                <div>
-                    <table width="100%" border="1">
-                      <tbody>
-                        <tr>
-                          <td>No</td>
-                          <td>Tanggal</td>
-                          <td>No SPPD</td>
-                          <td>Tujuan</td>
-                          <td>Jumlah Dana</td>
-                        </tr>
-                        {% for value in pengeluaran %}
-                            <tr>
-                                <td>{{ forloop.counter }}</td>
-                                <td>{{ value.tanggal |date:"d-m-o" }}</td>
-                                <td>{{ value.sppd.nomor }}</td>
-                                <td>{{ value.keperluan }}</td>
-                                <td>Rp {{ value.total_nya.jumlahnya__sum }}</td>
-                            </tr>
-                        {% endfor %}
-                      </tbody>
-                    </table>
-                </div>                                       
             </div>
-        </div>
-    </div>
-    <!-- END CONTENT BODY -->
+            <br>
+            <div>
+                <table width="100%" border="1">
+                  <tbody>
+                    <tr>
+                      <td>No</td>
+                      <td>Tanggal</td>
+                      <td>No SPPD</td>
+                      <td>Tujuan</td>
+                      <td>Jumlah Dana</td>
+                  </tr>
+                  {% for value in pengeluaran %}
+                  <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ value.tanggal |date:"d-m-o" }}</td>
+                    <td>{{ value.sppd.nomor }}</td>
+                    <td>{{ value.keperluan }}</td>
+                    {% language 'de' %}
+                    <td>Rp {{ value.total_nya.jumlahnya__sum|intcomma }}</td>
+                    {% endlanguage %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>                                       
+</div>
+</div>  <!-- end invoice -->
+</div>
+<!-- END CONTENT BODY -->
 </div>
 <!-- END CONTENT -->
 

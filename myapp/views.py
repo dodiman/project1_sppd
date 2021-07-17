@@ -10,6 +10,9 @@ from django.core.exceptions import ObjectDoesNotExist
 # izin
 from accounts.decorators import unauthenticated_user, allowed_users, admin_only
 
+# filter
+import datetime
+
 # json
 # from django.http import JsonResponse
 
@@ -427,6 +430,34 @@ def showRincianAdmin(request, pk):
 	rincian = pengeluaran.rincian.all()
 	total_rincian = pengeluaran.rincian.aggregate(Sum('jumlahnya'))
 
+	totalnya = pengeluaran.total_keseluruhan + total_rincian['jumlahnya__sum']
+
+	try:
+		bendahara = Pegawai.objects.filter(jabatan__iexact="Bendahara").first()
+	except ObjectDoesNotExist:
+		bendahara = None
+
+	# try:
+	# 	sppd2 = pengeluaran.sppd
+	# except ObjectDoesNotExist:
+	# 	sppd2 = None
+
+	context = {
+		'pengeluaran': pengeluaran,
+		'bendahara': bendahara,
+		'rincian': rincian,
+		'totalnya': totalnya,
+		'total_rincian': total_rincian['jumlahnya__sum'],
+	}
+	return render(request, 'myapp/myadmin/show_rincian.html', context)
+
+@login_required(login_url='login')
+@admin_only
+def showPerdinAdmin(request, pk):
+	pengeluaran = Pengeluaran.objects.get(id=pk)
+	rincian = pengeluaran.rincian.all()
+	total_rincian = pengeluaran.rincian.aggregate(Sum('jumlahnya'))
+
 	try:
 		bendahara = Pegawai.objects.filter(jabatan__iexact="Bendahara").first()
 	except ObjectDoesNotExist:
@@ -443,7 +474,7 @@ def showRincianAdmin(request, pk):
 		'rincian': rincian,
 		'total_rincian': total_rincian['jumlahnya__sum'],
 	}
-	return render(request, 'myapp/myadmin/show_rincian.html', context)
+	return render(request, 'myapp/myadmin/show_perdin.html', context)
 
 @login_required(login_url='login')
 @admin_only
@@ -605,20 +636,25 @@ def laporan(request):
 @admin_only
 def laporanAdmin(request):
 	pengeluaran = Pengeluaran.objects.all()
-	# # total_rincian = pengeluaran.rincian.aggregate(Sum('harga'))
-	# mylist = list(pengeluaran)
-	# kk = ()
-	# for i in range(len(mylist)):
-	# 	kk[i] = mylist[i]
-	# 	# kk += i
-	# 	print(kk)
 
-	# # print(kk)
-	# # print(type(mylist))
+	form = FilterForm()
+
+	# filter
+	if request.method == 'POST':
+		form = FilterForm(request.POST)
+		if form.is_valid():
+			
+			tahun = int(request.POST['tahun'])
+			bulan= int(request.POST['bulan'])
+			
+			pengeluaran = Pengeluaran.objects.filter(tanggal__year=tahun, tanggal__month=bulan)
+			# form.save()
+			# return redirect('myapp_pegawai_admin')
+
 
 	context = {
 		'pengeluaran': pengeluaran,
-		# 'mylist': mylist
+		'form': form,
 	}
 	return render(request, 'myapp/myadmin/laporan.html', context)
 
@@ -639,7 +675,6 @@ def pengeluaran(request):
 @admin_only
 def pengeluaranAdmin(request):
 	pengeluaran = Pengeluaran.objects.all()
-
 	context = {
 		'pengeluaran': pengeluaran
 	}
@@ -928,9 +963,64 @@ def surat_perintah_umum(request):
 
 @login_required(login_url='login')
 def createSuratPerintah_umum(request):
+	cek_data = Surat_perintah.objects.exists()
+
+	try:
+		data_terakhir = Surat_perintah.objects.latest('created_at')
+	except ObjectDoesNotExist:
+		data_terakhir = None
+
+
 	form = SuratPerintahForm()
 
+
+	a = ''
+
 	if request.method == 'POST':
+		
+
+		# membuat manipasi value post
+		post = request.POST.copy() 			# make it mutable  # typedata post = queryset
+		post_d = post.dict()
+		tanggalnya = post_d.get('tanggal')
+		
+		
+		# mengubah angka ke romawi
+		num_map = [(1000, 'M'), (900, 'CM'), (500, 'D'), (400, 'CD'), (100, 'C'), (90, 'XC'),
+		           (50, 'L'), (40, 'XL'), (10, 'X'), (9, 'IX'), (5, 'V'), (4, 'IV'), (1, 'I')]
+
+		def num2roman(num):
+
+		    roman = ''
+
+		    while num > 0:
+		        for i, r in num_map:
+		            while num >= i:
+		                roman += r
+		                num -= i
+
+		    return roman
+
+
+		tahun = int(tanggalnya[:4])
+		bulan = int(tanggalnya[5:7])
+		bulan = num2roman(bulan)
+
+		nomor_str = '001'
+		if cek_data:
+			gabung = data_terakhir.nomor
+			nomor = int(gabung[:3]) + 1
+			nomor_str = '%03d' % nomor
+
+		
+
+		no_spt = nomor_str + "/SPT/DISKOMINFO-PB/" + bulan + "/" + str(tahun)
+
+		post['nomor'] = no_spt
+
+		request.POST = post
+
+
 		form = SuratPerintahForm(request.POST)
 		if form.is_valid():
 			form.save()

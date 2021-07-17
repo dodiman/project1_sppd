@@ -1,176 +1,202 @@
 {% extends "base_admin.html" %}
 
 {% block style %}
+{% load l10n %}
+{% load i18n %}
+{% load humanize %}
 {% load static %}
+<link href="{% static 'css/mycss2.css' %}" rel="stylesheet">
 <style>
-      .invoice {
-        font-family: 'Times New Roman', Times, serif;
-      }
-    </style>
+.invoice {
+    font-family: 'Times New Roman', Times, serif;
+}
+</style>
 {% endblock %}
 
 {% block content %}
 <!-- BEGIN CONTENT -->
 <div class="page-content-wrapper">
+
     <!-- BEGIN CONTENT BODY -->
     <div class="page-content">
-        <div class="invoice">
-            <div class="" style="position: relative;">
-                <div>
+
+        {% language 'de' %}
+        <section class="times_new_rowan">
+            <div class="row">
+                <div class="col-md-12">
+                    <p class="text-center judul">PERINCIAN BIAYA PERJALANAN DINAS</p>
+                </div>
+            </div>
+            <div class="row after15">
+                <div class="col-md-12">
                     <table width="71%" border="0">
                         <tbody>
-                        <tr>
-                            <td colspan="3">PERINCIAN BIAYA PERJALANAN DINAS </td>
-                        </tr>
-                        <tr>
-                            <td width="151">Lampiran SPPD No </td>
-                            <td width="19">: </td>
-                            <td width="531">{{ pengeluaran.sppd.nomor }}</td>
-                        </tr>
-                        <tr>
-                            <td>Tanggal </td>
-                            <td> :</td>
-                            <td><p style="padding: 0; margin: 0;" id="waktu">{{ pengeluaran.sppd.tanggal_berangkat |date:"d M, Y" }} s/d  {{ pengeluaran.sppd.tanggal_kembali |date:"d M, Y" }}</p></td>
-                        </tr>
+                            <tr>
+                                <td colspan="3"><br /></td>
+                            </tr>
+                            <tr>
+                                <td width="151">Lampiran SPPD No </td>
+                                <td width="19">: </td>
+                                <td width="531">{{ pengeluaran.sppd.nomor }}</td>
+                            </tr>
+                            <tr>
+                                <td>Tanggal </td>
+                                <td> :</td>
+                                <td><p style="padding: 0; margin: 0;" id="waktu">{{ pengeluaran.sppd.tanggal_berangkat |date:"d M, Y" }} s/d  {{ pengeluaran.sppd.tanggal_kembali |date:"d M, Y" }}</p></td>
+                            </tr>
                         </tbody>
                     </table>
+                        
                 </div>
-                <div>
+            </div>
+
+        </section>
+        <div class="invoice">
+            <div class="" style="position: relative;">
+
+                <div class="row">
+                <div class="col-xs-12">
                     <table width="92%" border="1">
                         <tbody>
-                        <tr>
-                            <td width="">No </td>
-                            <td colspan="4"  align="center">Perincian Biaya </td>
-                            <!-- <td width="">Jumlah </td> -->
-                            <!-- <td width="">Jumlah </td> -->
-                            <td colspan="1" width="" align="center">Jumlah </td>
-                        </tr>
-                        
-                        <!-- <tr>
-                            <td> Nomor.</td>
-                            <td colspan="4">rincian.biaya.nama </td>
-                            <td> </td>
-                            <td rowspan=""></td>
-                        </tr> -->
+                            <tr>
+                                <td width="">No </td>
+                                <td colspan="4"  align="center">Perincian Biaya </td>
+                                <!-- <td width="">Jumlah </td> -->
+                                <!-- <td width="">Jumlah </td> -->
+                                <td colspan="1" width="" align="center">Jumlah </td>
+                                <td colspan="1" width="" align="center">Keterangan </td>
+                            </tr>
+
+                            <tr>
+                                <td> 1.</td>
+                                <td colspan="4">Tiket Pesawat Berangkat</td>
+                                <td>Rp. {{ pengeluaran.pesawat_pergi|intcomma }} </td>
+                                <td width="170" align="center" rowspan="7" style="padding: 0px; margin: 0px; vertical-align: top;">{{ pengeluaran.keterangan }}</td>
+                            </tr>
+                            <tr>
+                                <td> 2.</td>
+                                <td colspan="4">Tiket Pesawat Pulang</td>
+                                <td>Rp. {{ pengeluaran.pesawat_pulang|intcomma }} </td>
+                                <!-- <td rowspan=""></td> -->
+                            </tr>
+                            <tr>
+                                <td> 3.</td>
+                                <td colspan="4">Sewa Mobilitas Darat</td>
+                                <td>Rp. {{ pengeluaran.mobilitas|intcomma }} </td>
+                                <!-- <td rowspan=""></td> -->
+                            </tr>
+
                             {% for detail in rincian %}
                             <tr>
-                                <td>{{ forloop.counter }}</td>
+                                <td>{{ forloop.counter|add:"3" }}</td>
                                 <td width="">{{ detail.uraian }} </td>
                                 <td width="">{{ detail.kuantitas }} </td>
                                 <td width="">{{ detail.satuan }} </td>
-                                <td width="">Rp. {{ detail.harga }}</td>
-                                <td align="center">Rp. {{ detail.jumlahnya }} </td>
+                                <td width="">Rp. {{ detail.harga|intcomma }}</td>
+                                <td>Rp. {{ detail.jumlahnya|intcomma }} </td>
                             </tr>
                             {% endfor %}
-                        
-                        <tr>
-                            <td colspan="5"  align="center">Jumlah Total</td>
-                            <td align="center">Rp {{ total_rincian }} </td>
-                        </tr>
+
+                            <tr>
+                                <td colspan="5"  align="center">Jumlah Total</td>
+                                <td align="center">Rp {{ totalnya|intcomma }} 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="no-border"></td>
+                                <td class="font-miring" colspan="5"><b>Terbilang : <span id="tiganya"></span></b></td>
+                                
+                            </tr>
                         </tbody>
                     </table>
+
+                </div>
+                </div>
+
+            </div>
+        </div>   <!-- end invoice -->
+
+        <section class="times_new_rowan">
             
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <p>
+                                <br />
+                                Telah dibayarkan uang sejumlah : 
+                                <br />
+                                Rp {{ totalnya|intcomma }} (<span id="satunya"></span>)
+                            </p>
+                        </div>
+                        <div class="col-xs-6">
+                            <p>
+                                Manokwari, <span id="waktu_sekarang"></span>
+                                <br />
+                                Telah diterima uang sejumlah
+                                <br />
+                                Rp {{ totalnya|intcomma }} (<span id="duanya"></span>)
+                            </p>
+                            
+                            
+                        </div>
+                    </div>
                 </div>
+            </div>
+            <div class="row spasi1">
+                <div class="col-xs-12">
+                   <div class="row">
+                    <div class="col-xs-6">
+                        <p class="text-center">Bendahara Pengeluaran</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p class="text-center">{{ bendahara.nama|upper }}</p>
+                        <p class="text-center">NIP {{ bendahara.nip }}</p>
 
+                        <p>&nbsp;</p>
+                    </div>
+                    <div class="col-xs-6">
+                        <p class="text-center">Yang Menerima</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p class="text-center">{{ pengeluaran.pegawai.nama }}</p>
+                        <p class="text-center">NIP {{ pengeluaran.pegawai.nip }}</p>
 
-                
-                
-                <div>
-                    <p>Keterangan : {{ pengeluaran.keterangan }}</p>
+                        <p>&nbsp;</p>
+                    </div>
                 </div>
-                <br>
-                <div>
-                    <table width="77%" border="0">
-                        <tbody>
-                        <tr>
-                            <td width="285">Telah dibayarkan uang sejumlah : </td>
-                            <td width="152">&nbsp;</td>
-                            <td width="248"> Telah diterima uang sejumlah</td>
-                        </tr>
-                        <tr>
-                            <td> Rp {{ total_rincian }}</td>
-                            <td>&nbsp;</td>
-                            <td> Rp {{ total_rincian }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <br>
-                <div>
-                    <table width="77%" border="0">
-                        <tbody>
-                        <tr>
-                            <td width="251">Bendahara Pengeluaran </td>
-                            <td width="253">&nbsp;</td>
-                            <td width="253"> Yang Menerima</td>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td>{{ bendahara.nama|upper }}</td>
-                            <td>&nbsp;</td>
-                            <td>{{ pengeluaran.pegawai.nama }}</td>
-                        </tr>
-                        <tr>
-                            <td>NIP {{ bendahara.nip }} </td>
-                            <td>&nbsp;</td>
-                            <td>NIP {{ pengeluaran.pegawai.nip }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <br>
-                <div>
-                    <table width="86%" border="0">
-                        <tbody>
-                        <tr>
-                            <td width="510">&nbsp;</td>
-                            <td width="332" align="center">Mengetahui / Menyetujui : </td>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td align="center">{{ pengeluaran.sppd.surat_perintah.penanggung_jawab.jabatan }} </td>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td align="center">{{ pengeluaran.sppd.surat_perintah.penanggung_jawab.nama }}</td>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td align="center">NIP {{ pengeluaran.sppd.surat_perintah.penanggung_jawab.nip }} </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>               
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-12 spasi1">
+                <p class="text-center">Mengetahui / Menyetujui : </p>
+                <p class="text-center">{{ pengeluaran.sppd.surat_perintah.penanggung_jawab.jabatan }}</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p class="text-center">{{ pengeluaran.sppd.surat_perintah.penanggung_jawab.nama }}</p>
+                <p class="text-center">NIP {{ pengeluaran.sppd.surat_perintah.penanggung_jawab.nip }}</p>
+
+                <p>&nbsp;</p>
             </div>
         </div>
-    </div>
-    <!-- END CONTENT BODY -->
+
+
+    </section>
+</div>
+{% endlanguage %}
+<!-- END CONTENT BODY -->
 </div>
 <!-- END CONTENT -->
 
@@ -181,6 +207,8 @@
 
 {% block scripts %}
 <script src="{% static 'js/moment-with-locales.js' %}"></script>
+<script src="{% static 'js/terbilang.min.js' %}"></script>
+
 <script>
 
   let waktu_berangkat = "{{ pengeluaran.sppd.tanggal_berangkat }}";
@@ -193,5 +221,38 @@
   let waktu_ind2 = b.format('Do MMMM YYYY');
   let waktu_ind3 = c.format('Do MMMM YYYY');
   tempel2.innerText = waktu_ind2 + " s/d " + waktu_ind3;
+
+  let tanggal_sekarang = Date.now();
+  let tang = moment(tanggal_sekarang);
+  let tam = tang.format('Do MMMM YYYY');
+
+  let sat = document.querySelector('#waktu_sekarang');
+  sat.innerText = tam;
+
+// setting tanggal berdasarkan format indonesia
+function tanggalnya(nama_id, nilainya) {
+    let tanggal_pengeluaran = document.querySelector(nama_id)
+    let value_tanggal_pengeluaran = nilainya;
+    let mm = moment(value_tanggal_pengeluaran);
+    let tam2 = mm.format('Do MMMM YYYY');
+    tanggal_pengeluaran.innerText = tam2;
+}
+
+  // tanggalnya("#tanggal_pengeluaran", "{{ pengeluaran.tanggal }}");
+  // tanggalnya("#tanggal_sppd", "{{ pengeluaran.sppd.surat_perintah.tanggal }}");
+
+   // let tempelkan2 = document.querySelector('#terbilang');
+   // tempelkan2.innerText = terbilang("{{ total_rincian }}") + " Rupiah";
+
+   function kalimat_uang(nama_id, nilainya) {
+       let tempelkan2 = document.querySelector(nama_id);
+       tempelkan2.innerText = terbilang(nilainya) + " Rupiah";
+   }
+
+   kalimat_uang("#satunya", "{{ totalnya }}");
+   kalimat_uang('#duanya', '{{ totalnya }}');
+   kalimat_uang('#tiganya', '{{ totalnya }}');
+
+
 </script>
 {% endblock %}

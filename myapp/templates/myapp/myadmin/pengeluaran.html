@@ -75,10 +75,12 @@
                             		<td>{{ value.nomor_bukti_pengeluaran }}</td>
                             		<td>{{ value.sppd.nomor }}</td>
                             		<td>{{ value.tanggal |date:"d-m-o" }}</td>
-                            		<td><a href="{% url 'myapp_show_pengeluaran_admin' value.id %}" class="btn blue btn-outline">Lihat Kuitansi</a> <a href="{% url 'show_rincian_admin' value.id %}" class="btn blue btn-outline">Lihat Rincian</a>
+                            		<td><a href="{% url 'myapp_show_pengeluaran_admin' value.id %}" class="btn blue btn-outline btn-sm">Kuitansi</a> <a href="{% url 'show_rincian_admin' value.id %}" class="btn blue btn-outline btn-sm">Rincian</a>
 
-                                         <a href="{% url 'myapp_update_pengeluaran_admin' value.id %} " class="btn blue btn-outline" >Ubah</a>
-                                        <a href="{% url 'myapp_delete_pengeluaran_admin' value.id %} " class="btn red btn-outline" onclick="return confirm('apa anda yakin ingin hapus?')" >Hapus</a>
+                                        <a href="{% url 'show_perdin_admin' value.id %}" class="btn blue btn-outline btn-sm">Laporan Perdin</a>
+
+                                         <a href="{% url 'myapp_update_pengeluaran_admin' value.id %} " class="btn blue btn-outline btn-sm" ><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+                                        <a href="{% url 'myapp_delete_pengeluaran_admin' value.id %} " class="btn red btn-outline btn-sm" onclick="return confirm('apa anda yakin ingin hapus?')" ><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
                                     </td>
                             	</tr>
                             	{% endfor %}

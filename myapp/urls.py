@@ -50,6 +50,7 @@ urlpatterns = [
 	path('show_pengeluaran_admin/<str:pk>/', views.showPengeluaranAdmin, name="myapp_show_pengeluaran_admin"),
 	path('update_pengeluaran_admin/<str:pk>/change', views.updatePengeluaranAdmin, name="myapp_update_pengeluaran_admin"),
 	path('show_rincian_admin/<str:pk>/', views.showRincianAdmin, name="show_rincian_admin"),
+	path('show_perdin_admin/<str:pk>/', views.showPerdinAdmin, name="show_perdin_admin"),
 	path('delete_pengeluaran_admin/<str:pk>/', views.deletePengeluaranAdmin, name="myapp_delete_pengeluaran_admin"),
 
 	path('pegawai_admin', views.pegawaiAdmin, name='myapp_pegawai_admin'),

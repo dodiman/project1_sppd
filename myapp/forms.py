@@ -69,6 +69,11 @@ class PengeluaranForm(ModelForm):
 		self.fields['nomor_bukti_pengeluaran'].widget.attrs.update({'class': 'form-control'})
 		self.fields['sumber_dana'].widget.attrs.update({'class': 'form-control'})
 		self.fields['keperluan'].widget.attrs.update({'class': 'form-control'})
+
+		# tambahan baru
+		self.fields['pesawat_pergi'].widget.attrs.update({'class': 'form-control'})
+		self.fields['pesawat_pulang'].widget.attrs.update({'class': 'form-control'})
+		self.fields['mobilitas'].widget.attrs.update({'class': 'form-control'})
 		
 		self.fields['tanggal'].widget.attrs.update({
 				'class': 'form-control',
@@ -114,3 +119,27 @@ class RincianForm(ModelForm):
 	class Meta:
 		model = Rincian
 		fields = ['uraian', 'kuantitas', 'satuan','harga']
+
+class FilterForm(forms.Form):
+	GOLONGAN = (
+			(1, 'JANUARI'),
+			(2, 'FEBRUARI'),
+			(3, 'MARET'),
+			(4, 'APRIL'),
+			(5, 'MEI'),
+			(6, 'JUNI'),
+			(7, 'JULI'),
+			(8, 'AGUSTUS'),
+			(9, 'SEPTEMBER'),
+			(10, 'OKTOBER'),
+			(11, 'NOVEMBER'),
+			(12, 'DESEMBER'),
+			)
+
+	bulan = forms.ChoiceField(choices=GOLONGAN)
+	tahun = forms.CharField(max_length=10)
+
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.fields['bulan'].widget.attrs.update({'class': 'form-control'})
+		self.fields['tahun'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Masukkan Tahun'})

@@ -1,0 +1,234 @@
+{% extends "base_admin.html" %}
+
+{% block style %}
+{% load l10n %}
+{% load i18n %}
+{% load humanize %}
+{% load static %}
+<link href="{% static 'css/mycss2.css' %}" rel="stylesheet">
+<style>
+.invoice {
+    font-family: 'Times New Roman', Times, serif;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper">
+
+    <!-- BEGIN CONTENT BODY -->
+    <div class="page-content">
+        {% language 'de' %}
+        <section>
+            <div class="container-fluid" >
+                <div class="row">
+                    <div class="col-12 times_new_rowan">
+
+                        <div class="after1 spasi1 judul">
+                          <p class="text-center"><u>LAPORAN PERJALANAN DINAS</u></p>
+                      </div>
+                      <div class="spasi1">
+                          <p>Yth. Kepala Dinas Komunikasi Informatika, Persandian dan Statistik Provinsi Papua Barat</p>
+                      </div>
+                      <div class="spasi1 hangingindent">
+                          <p>Selaku Pengguna Anggaran</p>
+                          <p>melalui Bendara Pengeluaran SKPD</p>
+                          <p>di Manokwari</p>
+                          <p>&nbsp;</p>
+                          <p>Dengan ini melaporkan bahwa:</p>
+                      </div>
+
+
+                      <table width="100%" border="1">
+                          <tbody>
+                            <tr>
+                              <td width="145">Nama</td>
+                              <td width="18" style="text-align: center;">:</td>
+                              <td width="452">{{ pengeluaran.pegawai.nama }}</td>
+                          </tr>
+                          <tr>
+                              <td>NIP</td>
+                              <td style="text-align: center;">:</td>
+                              <td>{{ pengeluaran.pegawai.nip }}</td>
+                          </tr>
+                          <tr>
+                              <td>Pangkat/Golongan</td>
+                              <td style="text-align: center;">:</td>
+                              <td>{{ pengeluaran.pegawai.pangkat }} ({{ pengeluaran.pegawai.golongan }})</td>
+                          </tr>
+                          <tr>
+                              <td>Jabatan</td>
+                              <td style="text-align: center;">:</td>
+                              <td>{{ pengeluaran.pegawai.jabatan }}</td>
+                          </tr>
+                      </tbody>
+                  </table>
+                  <p>benar - benar telah melaksanakan perjalanan dinas sesuai dengan Surat Perintah Perjalanan Dinas:</p>
+                  <table width="100%" border="1">
+                      <tbody>
+                        <tr>
+                          <td width="145">Nomor SPPD</td>
+                          <td width="18" style="text-align: center;">:</td>
+                          <td width="452">{{ pengeluaran.sppd.nomor }}</td>
+                      </tr>
+                      <tr>
+                          <td>Tanggal SPPD</td>
+                          <td style="text-align: center;">:</td>
+                          <td><span id="tanggal_sppd"></span></td>
+                      </tr>
+                      <tr>
+                          <td>Maksud Perjalanan Dinas</td>
+                          <td style="text-align: center;">:</td>
+                          <td>{{ pengeluaran.sppd.surat_perintah.uraian }}</td>
+                      </tr>
+                      <tr>
+                          <td>&nbsp;</td>
+                          <td>&nbsp;</td>
+                          <td>&nbsp;</td>
+                      </tr>
+                      <tr>
+                          <td>Tempat Tujuan</td>
+                          <td style="text-align: center;">:</td>
+                          <td>{{ pengeluaran.sppd.tempat_tujuan }}</td>
+                      </tr>
+
+                      <tr>
+                          <td>Harga Tiket Pergi</td>
+                          <td style="text-align: center;">:</td>
+                          <td>Rp. {{ pengeluaran.pesawat_pergi|intcomma }}</td>
+                      </tr>
+
+                      <tr>
+                          <td>Sewa Mobilitas Darat</td>
+                          <td style="text-align: center;">:</td>
+                          <td>Rp. {{ pengeluaran.mobilitas|intcomma }}</td>
+                      </tr>
+
+                      <tr>
+                          <td>Harga Tiket Pulang</td>
+                          <td style="text-align: center;">:</td>
+                          <td>Rp. {{ pengeluaran.pesawat_pulang|intcomma }}</td>
+                      </tr>
+
+                      
+                      <tr>
+                          <td><span class="bold">Jumlah Tiket</span></td>
+                          <td style="text-align: center;">:</td>
+                          <td><span class="bold">Rp. {{ pengeluaran.total_harga_tiket|intcomma }}</span> (<span class="bold" id="terbilang"></span>)</td>
+                      </tr>
+                      <tr>
+                          <td>Keterangan lain - lain</td>
+                          <td>&nbsp;</td>
+                          <td>{{ pengeluaran.keterangan }}</td>
+                      </tr>
+                  </tbody>
+              </table>
+              <p>Berikut ini saya lampirkan bukti - bukti tiket dari boarding pass sebagai pertanggung jawaban perjalanan dinas dimaksud.</p>
+              <p>Segala kerugian daerah akibat kesalahan, kelalaian dan kealpaan saya atas bukti - bukti tersebut sepenuhnya menjadi tanggung jawab saya dan  apabila di kemudian terdapat kekeliruan dan atau kelebihan atas penggunaan bukti pengeluaran tersebut, saya bersedia untuk menyetorkan kelebihan belanja tersebut ke kas Daerah.</p>
+              <p class="hangingindent">Demikian laporan saya, atas perhatian Bapak/Ibu, di ucapkan terima kasih.</p>
+              <div class="row spasi1">
+                <div class="col-xs-12">
+                    <div class="row">
+                      <div class="col-xs-6 text-center">
+                        <p>Diterima Tanggal <span id="tanggal_pengeluaran"> {{ pengeluaran.tanggal }}</span></p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <div class="spasi1">
+                          <p><b><u>{{ bendahara.nama }}</u></b></p>
+                          <p>NIP. {{ bendahara.nip }}</p>
+                      </div>
+                  </div>
+                  <div class="col-xs-6 text-center">
+                    <p>Manokwari, <span id="waktu_sekarang"></span></p>
+                    <p>Pegawai Yang Melaksanakan</p>
+                    <p>Perjalanan Dinas</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <div class="spasi1">
+                      <p><b><u>{{ pengeluaran.pegawai.nama }}</u></b></p>
+                      <p>NIP. {{ pengeluaran.pegawai.nip }}</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>   <!-- end row -->
+
+  
+</div>
+</div>
+</div>
+</section>
+{% endlanguage %}
+
+</div>
+<!-- END CONTENT BODY -->
+</div>
+<!-- END CONTENT -->
+
+
+
+{% endblock %}
+
+
+{% block scripts %}
+<script src="{% static 'js/moment-with-locales.js' %}"></script>
+<script src="{% static 'js/terbilang.min.js' %}"></script>
+
+<script>
+
+  let waktu_berangkat = "{{ pengeluaran.sppd.tanggal_berangkat }}";
+  let waktu_kembali = "{{ pengeluaran.sppd.tanggal_kembali }}";
+  moment.locale('id');
+  let b = moment(waktu_berangkat);
+  let c = moment(waktu_kembali);
+  let tempel2 = document.querySelector('#waktu');
+
+  // let waktu_ind2 = b.format('Do MMMM YYYY');
+  // let waktu_ind3 = c.format('Do MMMM YYYY');
+  // tempel2.innerText = waktu_ind2 + " s/d " + waktu_ind3;
+
+  // let tanggal_sekarang = Date.now();
+  // let tang = moment(tanggal_sekarang);
+  // let tam = tang.format('Do MMMM YYYY');
+
+  let sat = document.querySelector('#waktu_sekarang');
+
+  let pengeluaran_tanggalnya = "{{ pengeluaran.tanggal }}";
+  let tambah_satu_hari = moment(pengeluaran_tanggalnya);
+  tambah_satu_hari.add(1, 'days');
+  let di = tambah_satu_hari.format('Do MMMM YYYY');
+  sat.innerText = di;
+
+// setting tanggal berdasarkan format indonesia
+function tanggalnya(nama_id, nilainya) {
+    let tanggal_pengeluaran = document.querySelector(nama_id)
+    let value_tanggal_pengeluaran = nilainya;
+    let mm = moment(value_tanggal_pengeluaran);
+    let tam2 = mm.format('Do MMMM YYYY');
+    tanggal_pengeluaran.innerText = tam2;
+}
+
+function terbilangnya(nama_id, nilainya) {
+  console.log('okelah');
+}
+
+tanggalnya("#tanggal_pengeluaran", "{{ pengeluaran.tanggal }}");
+tanggalnya("#tanggal_sppd", "{{ pengeluaran.sppd.surat_perintah.tanggal }}");
+
+let tempelkan2 = document.getElementById('terbilang');
+let datanya = "{{ pengeluaran.total_harga_tiket }}";
+if (datanya == 0) {
+  tempelkan2.innerText = "Nol Rupiah";
+} else {
+  tempelkan2.innerText = terbilang("{{ pengeluaran.total_harga_tiket }}") + " Rupiah";
+}
+
+</script>
+{% endblock %}

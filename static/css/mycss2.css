@@ -1,0 +1,45 @@
+@charset "utf-8";
+/* CSS Document */
+
+.times_new_rowan {
+	font-family: "Times New Roman", Times, serif;
+}
+
+.judul {
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+
+.after1 {
+	padding-bottom: 20px;
+}
+
+.after15 {
+	padding-bottom: 10px;
+}
+
+.no-border {
+	border: 0px;
+}
+
+
+.spasi1 {
+	line-height: 1px;
+}
+
+.font-miring {
+	font-style: italic;
+}
+
+.spasi15 {
+	line-height: 2px;
+}
+
+.hangingindent {
+  padding-left: 22px ;
+}

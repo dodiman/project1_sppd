@@ -59,15 +59,21 @@
 								    {{ form.nomor_bukti_pengeluaran }}
 								    <small class="text-danger">{{ form.nomor_bukti_pengeluaran.errors }}</small>
 								</div>
-                        		<div class="form-group">
+                        		<div class="form-group" hidden="">
 								    {{ form.sumber_dana.errors }}
-								    <label for="{{ form.sumber_dana.id_for_label }}">Telah di Terima dari:</label>
-								    {{ form.sumber_dana }}
+								    <label for="{{ form.sumber_dana.id_for_label }}">Sumber Dana:</label>
+								    <input class="form-control" type="text" name="sumber_dana" value="Bendarahara pengeluaran">
+								    <small class="text-danger"></small>
+								</div>
+								<div class="form-group">
+								    {{ form.sumber_dana.errors }}
+								    <label for="{{ form.sumber_dana.id_for_label }}">Sumber Dana:</label>
+								    <input class="form-control" type="text" name="sumber_dana" value="Bendarahara pengeluaran" disabled="">
 								    <small class="text-danger"></small>
 								</div>
 								<div class="form-group">
 								    {{ form.keperluan.errors }}
-								    <label for="{{ form.keperluan.id_for_label }}">Keperluan:</label>
+								    <label for="{{ form.keperluan.id_for_label }}">Keperluan / Maksud Perjalanan:</label>
 								    {{ form.keperluan }}
 								    <small class="text-danger"></small>
 								</div>
@@ -87,12 +93,7 @@
 
 								
 								</div>
-								<div class="form-group">
-								    {{ form.keterangan.errors }}
-								    <label for="{{ form.keterangan.id_for_label }}">Keterangan:</label>
-								    {{ form.keterangan }}
-								    <small class="text-danger"></small>
-								</div>
+								
 								<div class="form-group">
 								    
 								    <label for="{{ form.pegawai.id_for_label }}">Pegawai:</label>
@@ -106,17 +107,44 @@
 								    <small class="text-danger">{{ form.sppd.errors.0 }}</small>
 								</div>
 								<div class="form-group">
+								    
+								    <label for="{{ form.pesawat_pergi.id_for_label }}">Tiket Pergi:</label>
+								    {{ form.pesawat_pergi }}
+								    <small class="text-danger">{{ form.pesawat_pergi.errors.0 }}</small>
+								</div>
+								<div class="form-group">
+								    
+								    <label for="{{ form.pesawat_pulang.id_for_label }}">Tiket Pulang:</label>
+								    {{ form.pesawat_pulang }}
+								    <small class="text-danger">{{ form.pesawat_pulang.errors.0 }}</small>
+								</div>
+								<div class="form-group">
+								    
+								    <label for="{{ form.mobilitas.id_for_label }}">Biaya Mobilitas Darat:</label>
+								    {{ form.mobilitas }}
+								    <small class="text-danger">{{ form.mobilitas.errors.0 }}</small>
+								</div>
+								<div class="form-group">
+								    {{ form.keterangan.errors }}
+								    <label for="{{ form.keterangan.id_for_label }}">Keterangan:</label>
+								    {{ form.keterangan }}
+								    <small class="text-danger"></small>
+								</div>
+								<div class="form-group">
 								    {{ form.rincian.errors }}
-								    <label for="{{ form.rincian.id_for_label }}">Rincian:</label>
+								    <label for="{{ form.rincian.id_for_label }}">Rincian Tambahan:</label>
 								    {{ form.rincian }}
 								</div>
+
 								<div class="row">
 									<div class="col-md-4">
-										<a href="{% url 'myapp_rincian_admin' %} " class="btn blue btn-outline" >Lihat Semua Rincian</a>
+										<a href="{% url 'myapp_rincian_admin' %} " class="btn blue btn-outline" >Lihat Semua Rincian Tambahan</a>
 									</div>
 									<div class="col-md-4">
 									 <a href="{% url 'myapp_create_rincian_admin' %}" class="btn blue btn-outline" >Tambah Rincian</a>
 									</div>
+
+
 									<br />
 									<br />
 									<br />

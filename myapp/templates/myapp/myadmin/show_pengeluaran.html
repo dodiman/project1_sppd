@@ -2,6 +2,7 @@
 
 {% block style %}
 {% load static %}
+
 <style>
       .invoice {
         font-family: 'Times New Roman', Times, serif;
@@ -66,7 +67,13 @@
                         <td>&nbsp;</td>
                         <td>Uang Sejumlah</td>
                         <td>:</td>
-                        <td>Rp {{ total_rincian }}</td>
+                        <td id="titik"></td>
+                        </tr>
+                        <tr>
+                        <td>&nbsp;</td>
+                        <td>Terbilang</td>
+                        <td>:</td>
+                        <td><span id="terbilang"></span></td>
                         </tr>
                         <!-- <tr>
                         <td>&nbsp;</td>
@@ -171,6 +178,7 @@
 
 {% block scripts %}
 <script src="{% static 'js/moment-with-locales.js' %}"></script>
+<script src="{% static 'js/terbilang.min.js' %}"></script>
 <script>
 
   let waktu = "{{ pengeluaran.tanggal }}";
@@ -180,5 +188,20 @@
 
   let tampilkan = b.format('Do MMMM YYYY');
   tempel2.innerText = "Manokwari, " + tampilkan;
+
+
+  // mengkonversi titik untuk angka
+  function tambahkanTitik(angka) {
+    return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
+  let angkanya = "{{total_rincian}}";
+  let bilangan = tambahkanTitik(angkanya);
+  let tempelkan = document.querySelector('#titik');
+  tempelkan.innerText = "Rp. " + bilangan;
+
+  let tempelkan2 = document.querySelector('#terbilang');
+  tempelkan2.innerText = terbilang("{{total_rincian}}") + " Rupiah";
+  
 </script>
 {% endblock %}

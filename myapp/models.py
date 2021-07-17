@@ -72,9 +72,9 @@ class Surat_perintah(models.Model):
 	nomor = models.CharField(max_length=200, null=True)
 	uraian = models.CharField(max_length=200, null=True)
 	tanggal = models.DateField(null=True)
-	penanggung_jawab = models.ForeignKey(Pegawai, on_delete=models.CASCADE)
-	koordinator = models.ForeignKey(Pegawai, on_delete=models.CASCADE, related_name='+')
-	pengikut = models.ManyToManyField(Pegawai, related_name="Surat_perintahs")
+	penanggung_jawab = models.ForeignKey(Pegawai, on_delete=models.CASCADE, blank=True, null=True)
+	koordinator = models.ForeignKey(Pegawai, on_delete=models.CASCADE, related_name='+', blank=True, null=True)
+	pengikut = models.ManyToManyField(Pegawai, related_name="Surat_perintahs", blank=True)
 	# status = models.CharField(max_length=200, null=True)
 	created_at = models.DateTimeField(auto_now_add=True, null=True)
 	updated_at = models.DateTimeField(auto_now=True, null=True)
@@ -154,6 +154,9 @@ class Pengeluaran(models.Model):
 	keterangan = models.CharField(max_length=200, null=True)
 	sppd = models.ForeignKey(Sppd, on_delete=models.CASCADE)
 	pegawai = models.ForeignKey(Pegawai, on_delete=models.CASCADE)
+	pesawat_pergi = models.IntegerField(default=0)
+	pesawat_pulang = models.IntegerField(default=0)
+	mobilitas = models.IntegerField(default=0)
 	rincian = models.ManyToManyField(Rincian)
 	created_at = models.DateTimeField(auto_now_add=True, null=True)
 	updated_at = models.DateTimeField(auto_now=True, null=True)
@@ -168,6 +171,13 @@ class Pengeluaran(models.Model):
 	def total_nya(self):
 		return self.rincian.aggregate(Sum('jumlahnya'))
 
+	@property
+	def total_harga_tiket(self):
+		return self.pesawat_pergi + self.pesawat_pulang
+
+	@property
+	def total_keseluruhan(self):
+		return self.total_harga_tiket + self.mobilitas
 
 class Anggaran(models.Model):
 	
